@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import './assets/styles/index.css'
+import '@editor/tailwind/index.css'
 import './assets/styles/common.less'
 import { createPinia } from 'pinia'
 import router from './router'

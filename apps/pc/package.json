@@ -2,6 +2,9 @@
   "name": "pc",
   "private": true,
   "version": "0.0.0",
+  "dependencies": {
+    "@editor/tailwind": "workspace:*"
+  },
   "scripts": {
     "dev": "vite --open --port 9527",
     "build": "vue-tsc -b && vite build",

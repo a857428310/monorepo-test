@@ -10,7 +10,7 @@ import baseAppConfig from '../../configs/vite/app.base'
 export default defineConfig({
   ...baseAppConfig,
   css: {
-    postcss: './postcss.config.js'
+    postcss: path.resolve(__dirname, '../../packages-shared/tailwind/postcss.config.js')
   },
   plugins: [
     vue(),
