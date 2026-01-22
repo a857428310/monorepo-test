@@ -12,9 +12,7 @@ const locale = computed(() => {
 
 <template>
   <el-config-provider :locale="locale">
-    <div class="h-screen w-screen">
       <router-view/>
-    </div>
   </el-config-provider>
 </template>
 

@@ -1,7 +1,7 @@
 {
-  "name": "@editor/tailwind",
+  "name": "@ais/tailwind",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "tailwind.config.js",
   "files": [
     "tailwind.config.js",

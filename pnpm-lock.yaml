@@ -45,9 +45,6 @@ importers:
       '@vue/tsconfig':
         specifier: ^0.8.1
         version: 0.8.1(typescript@5.9.3)(vue@3.5.27(typescript@5.9.3))
-      autoprefixer:
-        specifier: ^10.4.21
-        version: 10.4.23(postcss@8.5.6)
       eslint:
         specifier: ^9.37.0
         version: 9.39.2(jiti@1.21.7)
@@ -63,18 +60,12 @@ importers:
       less-loader:
         specifier: ^12.3.0
         version: 12.3.0(less@4.5.1)
-      postcss:
-        specifier: ^8.5.6
-        version: 8.5.6
       prettier:
         specifier: ^3.5.3
         version: 3.8.1
       prettier-plugin-tailwindcss:
         specifier: ^0.6.12
         version: 0.6.14(prettier@3.8.1)
-      tailwindcss:
-        specifier: ^3.4.17
-        version: 3.4.19
       turbo:
         specifier: ^2.0.0
         version: 2.7.5
@@ -96,13 +87,32 @@ importers:
 
   apps/admin: {}
 
-  apps/pc: {}
+  apps/pc:
+    dependencies:
+      '@ais/components':
+        specifier: workspace:*
+        version: link:../../packages-shared/components
+      '@ais/tailwind':
+        specifier: workspace:*
+        version: link:../../packages-shared/tailwind
 
   packages-shared/components:
     dependencies:
       vue:
         specifier: ^3.5.22
         version: 3.5.27(typescript@5.9.3)
+
+  packages-shared/tailwind:
+    dependencies:
+      autoprefixer:
+        specifier: ^10.0.0
+        version: 10.4.23(postcss@8.5.6)
+      postcss:
+        specifier: ^8.0.0
+        version: 8.5.6
+      tailwindcss:
+        specifier: ^3.0.0
+        version: 3.4.19
 
   packages-shared/types: {}
 

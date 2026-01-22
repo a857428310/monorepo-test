@@ -1,4 +1,4 @@
-# Editor Monorepo
+# Ais Monorepo
 
 基于 pnpm + Turborepo 的 Vue 3 工程，包含 PC 端应用与公共共享包，支持统一构建、类型检查与增量构建。
 

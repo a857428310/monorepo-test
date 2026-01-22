@@ -1,11 +1,13 @@
 {
-  "name": "@editor/components",
+  "name": "@ais/components",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json && vite build",
     "type-check": "tsc -p tsconfig.json --noEmit"

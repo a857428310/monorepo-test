@@ -35,7 +35,6 @@ dist-xiaozhi/
 package/
 public/version.json
 
-# Editor directories and files
 !.vscode/extensions.json
 .idea
 .DS_Store

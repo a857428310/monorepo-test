@@ -1,5 +1,5 @@
 {
-  "name": "editor",
+  "name": "ais",
   "private": true,
   "version": "1.0.0",
   "packageManager": "pnpm@10.8.0",
@@ -9,10 +9,12 @@
     "changeset:public": "pnpm changeset --filter=packages-shared/*",
     "version:public": "pnpm changeset version --filter=packages-shared/*",
     "publish:public": "pnpm changeset publish --filter=packages-shared/*",
+    "dev": "turbo run dev --filter=pc",
     "dev:pc": "turbo run dev --filter=pc",
     "build:pc": "turbo run build --filter=pc",
     "lint": "turbo run lint",
-    "type-check": "turbo run type-check"
+    "type-check": "turbo run type-check",
+    "sync:versions": "node -e \"const fs=require('fs');const path=require('path');const root=process.cwd();const rootPkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));const version=rootPkg.version;const targets=['apps/admin/package.json','apps/pc/package.json','packages-shared/components/package.json','packages-shared/tailwind/package.json','packages-shared/types/package.json','packages-shared/utils/package.json'];for(const rel of targets){const p=path.join(root,rel);const data=JSON.parse(fs.readFileSync(p,'utf8'));data.version=version;fs.writeFileSync(p,JSON.stringify(data,null,2)+'\\n');}console.log('synced versions to',version);\""
   },
   "engines": {
     "node": ">=22.14.0",
@@ -33,16 +35,13 @@
     "@types/node": "^24.6.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
-    "autoprefixer": "^10.4.21",
     "eslint": "^9.37.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-prettier": "^5.1.3",
     "less": "^4.4.2",
     "less-loader": "^12.3.0",
-    "postcss": "^8.5.6",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.12",
-    "tailwindcss": "^3.4.17",
     "turbo": "^2.0.0",
     "typescript": "~5.9.3",
     "unplugin-auto-import": "^20.2.0",

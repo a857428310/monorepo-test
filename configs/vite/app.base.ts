@@ -8,10 +8,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(process.cwd(), 'src'),
-      '@editor': path.resolve(process.cwd(), '../../packages-shared')
+      '@ais': path.resolve(process.cwd(), '../../packages-shared')
     }
   },
   optimizeDeps: {
-    exclude: ['@editor/types']
+    exclude: ['@ais/types']
   }
 })
