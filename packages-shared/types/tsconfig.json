@@ -1,0 +1,14 @@
+{
+  "extends": "../../configs/tsconfig/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declarationDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@editor/*": ["../../packages-shared/*/src"]
+    }
+  },
+  "include": ["src/**/*"]
+}

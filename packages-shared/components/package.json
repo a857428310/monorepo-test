@@ -1,0 +1,16 @@
+{
+  "name": "@editor/components",
+  "private": true,
+  "version": "0.0.0",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && vite build",
+    "type-check": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "vue": "^3.5.22"
+  }
+}
