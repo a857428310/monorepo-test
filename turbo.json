@@ -11,11 +11,17 @@
       "dependsOn": ["^build"],
       "cache": true
     },
-    "lint": {
-      "outputs": []
-    },
     "type-check": {
-      "outputs": []
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "cache": true
+    },
+    "lint": {
+      "outputs": [],
+      "cache": true
+    },
+    "clean": {
+      "cache": false
     }
   },
   "globalEnv": ["VITE_API_BASE_URL"],

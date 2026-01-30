@@ -4,17 +4,17 @@
   "version": "1.0.0",
   "packageManager": "pnpm@10.8.0",
   "scripts": {
-    "build:public": "turbo run build --filter=packages-shared/*",
-    "lint:public": "turbo run lint --filter=packages-shared/*",
-    "changeset:public": "pnpm changeset --filter=packages-shared/*",
-    "version:public": "pnpm changeset version --filter=packages-shared/*",
-    "publish:public": "pnpm changeset publish --filter=packages-shared/*",
-    "dev": "turbo run dev --filter=pc",
-    "dev:pc": "turbo run dev --filter=pc",
-    "build:pc": "turbo run build --filter=pc",
+    "build:shared": "turbo run build --filter='@ais/*'",
+    "build:web": "turbo run build --filter=web",
+    "build:admin": "turbo run build --filter=admin",
+    "build:all": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=web",
+    "dev:admin": "turbo run dev --filter=admin",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
-    "sync:versions": "node -e \"const fs=require('fs');const path=require('path');const root=process.cwd();const rootPkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));const version=rootPkg.version;const targets=['apps/admin/package.json','apps/pc/package.json','packages-shared/components/package.json','packages-shared/tailwind/package.json','packages-shared/types/package.json','packages-shared/utils/package.json'];for(const rel of targets){const p=path.join(root,rel);const data=JSON.parse(fs.readFileSync(p,'utf8'));data.version=version;fs.writeFileSync(p,JSON.stringify(data,null,2)+'\\n');}console.log('synced versions to',version);\""
+    "clean": "turbo run clean && rm -rf node_modules",
+    "sync:versions": "node -e \"const fs=require('fs');const path=require('path');const root=process.cwd();const rootPkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));const version=rootPkg.version;const targets=['apps/admin/package.json','apps/web/package.json','packages-shared/components/package.json','packages-shared/tailwind/package.json','packages-shared/types/package.json','packages-shared/utils/package.json','packages/router/package.json','packages/web-modules/order/package.json'];for(const rel of targets){const p=path.join(root,rel);const data=JSON.parse(fs.readFileSync(p,'utf8'));data.version=version;fs.writeFileSync(p,JSON.stringify(data,null,2)+'\\n');}console.log('synced versions to',version);\""
   },
   "engines": {
     "node": ">=22.14.0",
@@ -38,6 +38,10 @@
     "eslint": "^9.37.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-tailwindcss": "^3.18.0",
+    "eslint-plugin-vue": "^9.30.0",
+    "eslint-define-config": "1.15.0",
     "less": "^4.4.2",
     "less-loader": "^12.3.0",
     "prettier": "^3.5.3",
@@ -48,5 +52,6 @@
     "unplugin-vue-components": "^29.1.0",
     "vite": "^7.1.7",
     "vue-tsc": "^3.1.0"
+    
   }
 }

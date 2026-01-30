@@ -18,7 +18,7 @@ const emit = defineEmits<{
     :disabled="disabled"
     @click="(event) => emit('click', event)"
   >
-    <span v-if="label" class="border p-5">{{ label }}</span>
+    <span v-if="label">{{ label }}</span>
     <slot v-else />
   </ElButton>
 </template>

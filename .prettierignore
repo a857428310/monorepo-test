@@ -1,0 +1,24 @@
+# 依赖包
+node_modules/
+dist/
+build/
+
+# 生成的文件
+*.min.js
+*.min.css
+
+# 第三方库
+public/pdfjs/
+src/iconfont/
+
+# 配置文件
+*.config.js
+Dockerfile
+Jenkinsfile
+
+# 文档
+*.md
+
+# 临时文件
+*.tmp
+*.log 

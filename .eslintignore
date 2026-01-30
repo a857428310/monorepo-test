@@ -1,0 +1,8 @@
+/build/
+/config/
+/dist/
+/nginx/
+/scripts/
+/types/ 
+/node_modules/*
+/dist* 

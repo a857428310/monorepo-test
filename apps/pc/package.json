@@ -1,9 +1,0 @@
-{
-  "name": "pc",
-  "private": true,
-  "version": "1.0.0",
-  "dependencies": {
-    "@ais/tailwind": "workspace:*",
-    "@ais/components": "workspace:*"
-  }
-}
