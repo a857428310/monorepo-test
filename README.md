@@ -20,11 +20,11 @@
 │   │   └── src/index.ts       # 路由工厂函数、全局守卫、基础路由
 │   │
 │   └── web-modules/           # PC 端业务模块（纯业务逻辑）
-│       ├── order/             # 订单模块（@ais/web-order）
+│       ├── login/            # 登录模块（@ais/web-login）
 │       │   ├── src/
-│       │   │   ├── views/     # 订单页面组件
-│       │   │   ├── api/       # 订单 API
-│       │   │   └── types.ts   # 订单类型定义
+│       │   │   ├── views/     # 登录页面组件
+│       │   │   ├── api/       # 登录 API
+│       │   │   └── types.ts   # 登录类型定义
 │       │   └── package.json
 │       │
 │       └── goods/             # 商品模块（@ais/web-goods）
@@ -138,12 +138,12 @@ pnpm build:all
 // apps/web/src/router/index.ts
 const appRoutes = [
   {
-    path: '/order',
+    path: '/login',
     component: () => import('@/layouts/BasicLayout.vue'),
     children: [
       {
-        path: 'list',
-        component: () => import('@ais/web-order/src/views/OrderList/index.vue')
+        path: 'index',
+        component: () => import('@ais/web-login/src/views/Login/index.vue')
       }
     ]
   }
@@ -154,8 +154,8 @@ const appRoutes = [
 
 ```typescript
 // ❌ 不要在业务模块包中这样做
-// packages/web-modules/order/src/router/index.ts
-export const orderRoutes = [...] // ❌ 业务模块不应该包含路由
+// packages/web-modules/login/src/router/index.ts
+export const loginRoutes = [...] // ❌ 业务模块不应该包含路由
 ```
 
 ### 2. 业务模块包职责（纯业务逻辑）
@@ -212,7 +212,7 @@ const fetchGoodsList = async () => {
 ### 4. 包命名规范
 
 - **共享包**: `@ais/components`、`@ais/utils`、`@ais/types`、`@ais/router`
-- **业务模块**: `@ais/web-order`、`@ais/web-goods`、`@ais/web-user`
+- **业务模块**: `@ais/web-login`、`@ais/web-goods`、`@ais/web-user`
 
 ### 5. 包引用方式
 
@@ -394,22 +394,22 @@ Vite 开发模式下应该会自动热更。如果没有，请检查：
 ### 2. 命名规范（全工程统一，区分大小写/前缀）
 #### 通用命名原则
 - 语义化：命名需清晰表达用途，**禁止使用拼音/拼音首字母/无意义字符**（如 `data1/foo/bar/userList1`）
-- 一致性：同一业务概念的命名全工程统一（如订单列表统一为 `orderList`，而非 `orderArr/orderData`）如果要与后端对接，可以考虑前后端命名规范一致。
+- 一致性：同一业务概念的命名全工程统一（如用户列表统一为 `userList`，而非 `userArr/userData`）如果要与后端对接，可以考虑前后端命名规范一致。
 - 无歧义：避免缩写（通用缩写除外，如 `info`/`api`/`btn`），保证新成员能直接理解命名含义
 
 #### 各类型命名规则
 | 类型         | 命名方式       | 示例                     | 备注                     |
 |--------------|----------------|--------------------------|--------------------------|
 | 变量/常量    | 小驼峰         | `userList`/`totalPrice`  | 常量全大写+下划线（`const MAX_SIZE = 10`） |
-| 函数/方法    | 小驼峰         | `getOrderList`/`formatTime` | 动宾结构，清晰表达行为   |
+| 函数/方法    | 小驼峰         | `getLoginInfo`/`formatTime` | 动宾结构，清晰表达行为   |
 | 类/接口      | 大驼峰         | `UserService`/`GoodsItem` | TypeScript 专用          |
-| 组件         | 大驼峰         | `OrderList`/`GoodsFormDialog` | Vue 组件，与文件名一致   |
-| 路由名称     | 大驼峰         | `OrderList`/`UserDetail` | 与组件名对应，便于查找   |
+| 组件         | 大驼峰         | `Login`/`GoodsFormDialog` | Vue 组件，与文件名一致   |
+| 路由名称     | 大驼峰         | `Login`/`UserDetail` | 与组件名对应，便于查找   |
 | 包/模块      | 短横线命名     | `@ais/web-utils`/`@ais/components` | 与现有规范保持一致       |
 | 文件名/目录名| 大驼峰（组件）/小驼峰（其他） | `OrderList.vue`/`api/index.ts` | 组件文件必须大驼峰       |
 | Pinia 仓库   | 小驼峰+`Store` 后缀 | `userStore`/`cartStore` | 与 `defineStore` 名称一致 |
 | 环境变量     | 全大写+下划线   | `VITE_API_BASE_URL`/`VITE_APP_ENV` | Vite 环境变量需以 `VITE_` 开头 |
-| 事件方法     | 小驼峰+`handle` 前缀 | `handleOrderClick`/`handleFormSubmit` | 区分普通方法与事件处理   |
+| 事件方法     | 小驼峰+`handle` 前缀 | `handleLoginClick`/`handleFormSubmit` | 区分普通方法与事件处理   |
 
 ## 🎯 二、Vue 3 开发规范（Setup 语法糖优先）
 工程统一使用 **`<script setup lang="ts">`** 语法糖（Vue 3 推荐写法），禁止使用 Options API，与 Composition API 保持一致，所有规范贴合工程现有 Monorepo 组件分层逻辑。
@@ -443,9 +443,9 @@ Vite 开发模式下应该会自动热更。如果没有，请检查：
   - 列表渲染：`v-for` 必须绑定**唯一 `key`**，优先使用数据的唯一业务 ID，**禁止使用索引 `index`** 作为 key
     ```vue
     <!-- ✅ 推荐 -->
-    <div v-for="item in orderList" :key="item.id">{{ item.orderNo }}</div>
+    <div v-for="item in userList" :key="item.id">{{ item.username }}</div>
     <!-- ❌ 避免 -->
-    <div v-for="(item, index) in orderList" :key="index">{{ item.orderNo }}</div>
+    <div v-for="(item, index) in userList" :key="index">{{ item.username }}</div>
     ```
 
 - 事件处理：
@@ -461,9 +461,9 @@ Vite 开发模式下应该会自动热更。如果没有，请检查：
   import { ref, computed, onMounted } from 'vue'; // 外部依赖
   import { ElMessage, ElTable } from 'element-plus'; // 第三方 UI 库
   import { formatTime, deepClone } from '@ais/utils'; // 共享包
-  import { getOrderListApi } from '@ais/web-order/api'; // 业务模块
+  import { getLoginInfoApi } from '@ais/web-login/api'; // 业务模块
   import BasicLayout from '@/layouts/BasicLayout.vue'; // 本地组件
-  import '@/styles/order.less'; // 本地样式
+  import '@/styles/login.less'; // 本地样式
   ```
 
 - 导出规则：`<script setup>` 中无需手动导出，通过**变量/方法直接暴露**给模板，禁止使用 `export default`/`export const`（特殊公共组件导出除外）
@@ -616,7 +616,7 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
 
 ### 3. 组件开发规范
 #### 组件设计核心原则
-- 单一职责：一个组件仅负责**一个核心功能**（如 `OrderList` 仅负责订单列表展示与基础操作，`GoodsFormDialog` 仅负责商品表单的编辑与提交）
+- 单一职责：一个组件仅负责**一个核心功能**（如 `Login` 仅负责登录表单展示与基础操作，`GoodsFormDialog` 仅负责商品表单的编辑与提交）
 - 可复用性：`packages/web-modules/*/src/views/` 下的业务组件需保证**低耦合、无应用层依赖**，可在多个页面复用
 - 单向数据流：严格遵循 props 单向传递规则，子组件**禁止直接修改 props**，需通过 `emit` 触发事件通知父组件修改
 - 依赖分层：组件仅依赖自身层级及下层包（应用层组件依赖业务模块组件，业务模块组件依赖共享包组件），禁止跨层/反向依赖
@@ -630,10 +630,10 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
   ```typescript
   // ✅ 推荐
   const props = defineProps({
-    orderId: {
+    username: {
       type: String,
       required: true,
-      description: '订单唯一业务ID，非自增ID'
+      description: '用户名'
     },
     pageSize: {
       type: Number,
@@ -643,8 +643,8 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
     status: {
       type: [String, Number],
       default: 'all',
-      validator: (val: string | number) => ['all', 'pending', 'paid', 0, 1].includes(val),
-      description: '订单筛选状态：all-全部，pending-待支付，paid-已支付，0/1-兼容数字类型'
+      validator: (val: string | number) => ['all', 'active', 'inactive', 0, 1].includes(val),
+      description: '用户筛选状态：all-全部，active-活跃，inactive-非活跃，0/1-兼容数字类型'
     }
   });
   ```
@@ -653,19 +653,19 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
   ```typescript
   // ✅ 推荐
   const emit = defineEmits<{
-    (e: 'order-click', orderId: string): void;
+    (e: 'login-success', token: string): void;
     (e: 'page-change', pageNum: number, pageSize: number): void;
     (e: 'search', query: Record<string, any>): void;
   }>();
   // 触发事件
-  emit('order-click', props.orderId);
+  emit('login-success', props.token);
   ```
 
 - 插槽（Slot）：使用具名插槽替代匿名插槽，复杂组件插槽添加默认内容，插槽作用域属性使用 `camelCase` 命名
 
 #### 组件复用与抽象规范
 - 通用基础组件：无业务关联的通用组件（如按钮、输入框、空状态、分页）统一抽离到 `packages-shared/components/`，供全工程复用
-- 业务通用组件：与具体业务相关但可复用的组件（如 `OrderItem`/`GoodsCard`）抽离到对应业务模块包，仅在业务内复用
+- 业务通用组件：与具体业务相关但可复用的组件（如 `UserCard`/`GoodsCard`）抽离到对应业务模块包，仅在业务内复用
 - 复杂复用逻辑：优先使用**组合式函数（Composables）**抽离（统一放在 `packages-shared/composables/`），禁止使用高阶组件（Vue 3 官方推荐组合式函数替代）
   ```typescript
   // 示例：通用分页组合式函数（packages-shared/composables/usePagination.ts）
@@ -696,10 +696,10 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
 
 ### 4. Pinia 状态管理规范（@ais/pinia）
 基于工程现有 `@ais/pinia` 共享包，统一状态管理规范，避免状态混乱和滥用。
-- 仓库划分原则：按**业务域垂直划分**（如 `userStore`/`orderStore`/`cartStore`/`goodsStore`），禁止单仓库管理所有业务状态，单个仓库状态不超过20个
+- 仓库划分原则：按**业务域垂直划分**（如 `userStore`/`loginStore`/`cartStore`/`goodsStore`），禁止单仓库管理所有业务状态，单个仓库状态不超过20个
 - 仓库存放位置：
   - 全局共享状态（如用户信息、全局配置、登录状态）：统一放在 `packages-shared/pinia/`
-  - 业务专属状态（如订单列表筛选条件、商品详情缓存）：放在对应业务模块包（如 `@ais/web-order/src/store/`）
+  - 业务专属状态（如用户信息筛选条件、商品详情缓存）：放在对应业务模块包（如 `@ais/web-login/src/store/`）
 - 状态操作严格规则：
   - 禁止组件直接修改 Pinia 仓库状态，**所有状态修改必须通过仓库的 actions 方法**（统一状态修改入口，便于调试、日志记录和权限控制）
   - 所有异步逻辑（如 API 请求、定时器）必须放在仓库的 `actions` 中，组件仅调用 actions，不处理任何异步操作和异常捕获
@@ -801,22 +801,21 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
   - 空值场景使用 `null/undefined`（工程 `tsconfig.json` 必须开启 `strictNullChecks` 严格空值检查）
   - 任意对象类型使用 `Record<string, any>`（仅在特殊场景，且需注释）
 - 基础类型：优先使用 TypeScript 原生小写类型（`string/number/boolean/symbol`），**禁止使用 JavaScript 包装类型**（`String/Number/Boolean`）
-- 数组类型：优先使用**泛型简写形式**（`string[]`/`IOrderItem[]`），复杂嵌套场景可使用 `Array<T>`
+- 数组类型：优先使用**泛型简写形式**（`string[]`/`IUserItem[]`），复杂嵌套场景可使用 `Array<T>`
 - 元组类型：固定长度、固定类型的数组必须使用元组类型（`[string, number, boolean]`），并添加清晰的类型注解，禁止使用普通数组替代
-- 枚举类型：业务中固定值集合（如订单状态、商品分类、接口返回码）必须使用 `enum` 定义，提升代码可读性和可维护性，禁止使用魔法值
+- 枚举类型：业务中固定值集合（如登录状态、商品分类、接口返回码）必须使用 `enum` 定义，提升代码可读性和可维护性，禁止使用魔法值
   ```typescript
   // ✅ 推荐：使用枚举定义固定状态
-  export enum OrderStatus {
-    PENDING = 'pending', // 待支付
-    PAID = 'paid',       // 已支付
-    SHIPPED = 'shipped', // 已发货
-    FINISHED = 'finished', // 已完成
-    CANCELLED = 'cancelled' // 已取消
+  export enum LoginStatus {
+    SUCCESS = 'success', // 登录成功
+    FAILED = 'failed',   // 登录失败
+    PENDING = 'pending', // 待验证
+    LOCKED = 'locked'    // 账户锁定
   }
   // 使用枚举
-  const currentStatus: OrderStatus = OrderStatus.PENDING;
+  const currentStatus: LoginStatus = LoginStatus.SUCCESS;
   // ❌ 避免：使用魔法值
-  const currentStatus = 'pending';
+  const currentStatus = 'success';
   ```
 
 - 字面量类型：单一固定值使用字面量类型（`type ButtonType = 'primary' | 'success' | 'warning'`），替代无意义的枚举
@@ -825,11 +824,11 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
 - 接口（`interface`）：**专门用于定义对象结构**（如业务实体、API 请求/响应参数、组件 Props 结构），支持 `extends` 扩展和自动合并，适合需要持续扩展的对象类型
 - 类型别名（`type`）：用于**基础类型组合、联合类型、元组类型、字面量类型**，不支持自动合并，适合一次性定义的复合类型
 - 命名规则：
-  - 接口：以**`I` 为前缀**（如 `IUserInfo`/`IOrderItem`/`IBaseResponse`）
-  - 类型别名：以**`T` 为前缀**（如 `TOrderListQuery`/`TButtonType`/`TPagination`）
-  - 枚举：首字母大写，驼峰命名（如 `OrderStatus`/`GoodsCategory`）
+  - 接口：以**`I` 为前缀**（如 `IUserInfo`/`ILoginItem`/`IBaseResponse`）
+  - 类型别名：以**`T` 为前缀**（如 `TLoginQuery`/`TButtonType`/`TPagination`）
+  - 枚举：首字母大写，驼峰命名（如 `LoginStatus`/`GoodsCategory`）
 - 存放位置：
-  - 业务相关的接口/类型：放在对应业务模块包的 `types.ts` 文件中（如 `@ais/web-order/src/types.ts`）
+  - 业务相关的接口/类型：放在对应业务模块包的 `types.ts` 文件中（如 `@ais/web-login/src/types.ts`）
   - 基础通用的接口/类型：放在 `packages-shared/types/` 中（如 `IBaseResponse`/`TPagination`）
 - 基础通用接口封装：封装全工程通用的基础接口，减少重复定义（如 API 响应通用结构）
   ```typescript
@@ -842,31 +841,31 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
     success: boolean;
   }
 
-  // @ais/web-order/src/types.ts 业务接口（继承基础接口）
+  // @ais/web-login/src/types.ts 业务接口（继承基础接口）
   import { IBaseResponse } from '@ais/types';
-  import { OrderStatus } from './enum';
+  import { LoginStatus } from './enum';
 
-  // 订单项接口
-  export interface IOrderItem {
+  // 登录项接口
+  export interface ILoginItem {
     id: string;
-    orderNo: string;
-    status: OrderStatus;
-    totalPrice: number;
-    createTime: string;
-    productName: string;
+    username: string;
+    password: string;
+    status: LoginStatus;
+    lastLoginTime: string;
+    loginIp: string;
   }
-  // 订单列表查询参数类型
-  export type TOrderListQuery = {
+  // 登录查询参数类型
+  export type TLoginQuery = {
     keyword?: string;
-    status?: OrderStatus | 'all';
+    status?: LoginStatus | 'all';
     pageNum: number;
     pageSize: number;
     startTime?: string;
     endTime?: string;
   };
-  // 订单列表响应接口（继承基础接口）
-  export type IOrderListResponse = IBaseResponse<{
-    records: IOrderItem[];
+  // 登录响应接口（继承基础接口）
+  export type ILoginResponse = IBaseResponse<{
+    records: ILoginItem[];
     total: number;
   }>;
   ```
@@ -875,7 +874,7 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
 - 函数参数：**所有参数必须显式添加类型注解**，可选参数放在参数列表最后，添加默认值的参数自动为可选，禁止无类型注解的参数
 - 函数返回值：**必须显式声明返回值类型**，无返回值声明为 `void`，异步函数必须声明为 `Promise<T>` 泛型类型，禁止依赖 TypeScript 自动推导
 - 箭头函数规范：单个参数可省略括号，多个参数/无参数必须加括号，复杂函数（超过3行）显式声明返回值类型
-- 函数命名：动宾结构，清晰表达函数行为（如 `getOrderList`/`formatTime`/`validateForm`），禁止无意义的命名（如 `handleData`/`processInfo`）
+- 函数命名：动宾结构，清晰表达函数行为（如 `getLoginInfo`/`formatTime`/`validateForm`），禁止无意义的命名（如 `handleData`/`processInfo`）
 - 标准示例：
   ```typescript
   // ✅ 推荐：同步函数，显式声明参数和返回值
@@ -885,8 +884,8 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
   };
 
   // ✅ 推荐：异步函数，返回Promise<T>
-  const getOrderList = async (query: TOrderListQuery): Promise<IOrderListResponse> => {
-    const res = await axios.get('/api/order/list', { params: query });
+  const getLoginInfo = async (query: TLoginQuery): Promise<ILoginResponse> => {
+    const res = await axios.get('/api/login/info', { params: query });
     return res.data;
   };
 
@@ -908,7 +907,7 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
   const res = await getUserInfoApi();
   const userInfo = res.data as IUserInfo;
   // ❌ 避免：滥用断言绕过校验
-  const data = anyData as IOrderItem;
+  const data = anyData as ILoginItem;
   ```
 
 - 类型守卫：处理 `unknown` 类型时，**必须使用类型守卫缩小类型范围**，替代类型断言，提升代码安全性
@@ -918,8 +917,8 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
     return typeof val === 'string' && val.length > 0;
   };
 
-  const isOrderItem = (val: unknown): val is IOrderItem => {
-    return typeof val === 'object' && val !== null && 'id' in val && 'orderNo' in val;
+  const isLoginItem = (val: unknown): val is ILoginItem => {
+    return typeof val === 'object' && val !== null && 'id' in val && 'username' in val;
   };
 
   // 使用类型守卫
@@ -927,13 +926,13 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
     if (isString(data)) {
       console.log(data.length); // 此时data被推断为string类型
     }
-    if (isOrderItem(data)) {
-      console.log(data.orderNo); // 此时data被推断为IOrderItem类型
+    if (isLoginItem(data)) {
+      console.log(data.username); // 此时data被推断为ILoginItem类型
     }
   };
   ```
 
-- 非空断言：仅在明确变量非 `null/undefined` 时使用 `!` 非空断言，禁止滥用（如 `data!.orderNo`）
+- 非空断言：仅在明确变量非 `null/undefined` 时使用 `!` 非空断言，禁止滥用（如 `data!.username`）
 
 ### 5. TSConfig 配置规范
 - 配置分层：根目录 `configs/tsconfig/` 维护**基础 TS 配置**（`base.json`），所有应用/包通过 `extends` 继承基础配置，避免重复配置，保证全工程校验规则一致
@@ -971,13 +970,13 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
   - 全局公共依赖（如 Vue/TypeScript/Vite/Element Plus/Pinia）：安装在**根目录 `package.json`**（使用 `-w` 标记，`pnpm add -D vue typescript vite -w`）
   - 子包专属依赖（如某应用的特殊插件、业务模块的专属工具）：安装在**对应子包的 `package.json`**，两种安装方式：
     1. 进入子包目录执行：`pnpm add xxx`
-    2. 根目录执行过滤命令：`pnpm add xxx --filter @ais/web-order`
+    2. 根目录执行过滤命令：`pnpm add xxx --filter @ais/web-login`
 - 依赖版本管理：所有包使用**统一的依赖版本**，根目录锁定核心依赖版本，子包继承，**禁止子包单独指定不同版本的核心依赖**（如 Vue/TypeScript），避免版本冲突和类型错误
 - 依赖更新：核心依赖的更新必须在根目录统一执行（`pnpm update xxx -w`），更新后需全工程测试，禁止子包单独更新
 - 无用依赖清理：定期在根目录执行 `pnpm prune` 清理无用依赖，保持依赖树简洁
 
 ### 2. 包引用与导出规范
-- 包引用原则：**必须使用包名别名引用**（如 `@ais/web-order`/`@ais/utils`/`@ais/components`），**禁止使用任何相对路径引用子包**（如 `../../../packages/web-modules/order`），确保引用路径统一、可维护
+- 包引用原则：**必须使用包名别名引用**（如 `@ais/web-login`/`@ais/utils`/`@ais/components`），**禁止使用任何相对路径引用子包**（如 `../../../packages/web-modules/login`），确保引用路径统一、可维护
 - 包导出规范：每个子包（`packages/*/packages-shared/*`）必须在 `package.json` 中配置 `main`（主入口）和 `types`（类型入口），且入口文件（如 `src/index.ts`）必须**统一导出**所有公共 API/组件/类型，禁止直接引用子包内部文件
   ```json
   // @ais/web-goods package.json 出口配置示例
@@ -1015,11 +1014,70 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
 - 核心原则：**所有路由配置必须统一放在应用层**（`apps/*/src/router/`），业务模块包（`packages/web-modules/*`）**禁止包含任何路由代码、路由配置、路由守卫**，严格遵守“路由在应用层，业务逻辑在模块层”的设计理念
 - 路由懒加载：**所有路由组件必须使用懒加载**（`() => import(...)`），减少应用首屏加载体积，提升启动速度，禁止直接导入组件
 - 路由命名规范：
-  - 路由 `name`：必须**唯一**，使用大驼峰命名，与对应组件名完全一致（如 `OrderList` 路由对应 `OrderList` 组件）
-  - 路由 `path`：使用**短横线命名（kebab-case）**，与业务模块对应，层级清晰（如 `/order/list`/`/goods/detail/:id`/`/user/info`），禁止使用驼峰/下划线
+  - 路由 `name`：必须**唯一**，使用大驼峰命名，与对应组件名完全一致（如 `Login` 路由对应 `Login` 组件）
+  - 路由 `path`：使用**短横线命名（kebab-case）**，与业务模块对应，层级清晰（如 `/login/index`/`/goods/detail/:id`/`/user/info`），禁止使用驼峰/下划线
 - 路由元信息：所有路由必须添加 `meta` 字段，包含页面标题、是否需要登录、权限标识等基础信息，便于全局守卫统一处理
-- 路由参数：动态路由参数使用有意义的命名（如 `/:id`/`/:orderNo`），禁止使用无意义的参数名（如 `/:param`），可选参数通过查询参数（`query`）传递
+- 路由参数：动态路由参数使用有意义的命名（如 `/:id`/`/:username`），禁止使用无意义的参数名（如 `/:param`），可选参数通过查询参数（`query`）传递
 - 路由守卫：全局守卫（登录校验、权限校验、页面标题设置）统一放在应用层路由入口文件，业务模块不做任何路由相关的权限控制
+- **路由跳转规范**：模板中进行路由跳转时，**必须使用 `<router-link>` 组件**，禁止使用 `<a>` 标签或编程式导航（`router.push`），以充分利用 Vue Router 的导航性能优化和特性
+  ```vue
+  <!-- ✅ 推荐：使用 router-link 进行路由跳转 -->
+  <template>
+    <!-- 基础用法：使用 path 跳转 -->
+    <router-link to="/login/index">登录</router-link>
+
+    <!-- 推荐：使用命名路由跳转（更灵活，路由修改时无需改代码） -->
+    <router-link :to="{ name: 'Login' }">登录</router-link>
+
+    <!-- 带查询参数跳转 -->
+    <router-link :to="{ name: 'GoodsDetail', params: { id: goods.id } }">
+      查看商品详情
+    </router-link>
+
+    <!-- 带查询参数跳转 -->
+    <router-link :to="{ path: '/login/index', query: { redirect: '/dashboard' } }">
+      登录后跳转
+    </router-link>
+
+    <!-- 动态绑定跳转 -->
+    <router-link :to="item.path">{{ item.title }}</router-link>
+
+    <!-- 自定义标签名（默认为 <a>） -->
+    <router-link to="/dashboard" custom v-slot="{ navigate }">
+      <button @click="navigate">跳转到控制台</button>
+    </router-link>
+  </template>
+
+  <!-- ❌ 避免：使用 a 标签进行路由跳转（会导致页面刷新，丢失应用状态） -->
+  <template>
+    <a href="/login/index">登录</a> <!-- ❌ 页面会刷新 -->
+    <div @click="() => router.push('/login/index')">登录</div> <!-- ❌ 无法享受 router-link 的优化 -->
+  </template>
+  ```
+
+  **为什么必须使用 `<router-link>`？**
+  - **性能优化**：自动处理点击事件，触发客户端路由跳转，避免页面完全刷新
+  - **SEO 友好**：渲染为 `<a>` 标签，搜索引擎可正常爬取
+  - **可访问性**：支持键盘导航（Tab 键聚焦、Enter 键激活）、屏幕阅读器等辅助技术
+  - **类型安全**：在 TypeScript 中提供完整的类型提示和校验
+
+  **编程式导航使用场景**（仅在以下场景使用 `router.push`）：
+  - 需要在跳转前执行业务逻辑（如表单校验、数据保存）
+  - 需要根据异步请求结果决定跳转目标
+  - 需要在跳转时传递复杂状态（`router.push({ path: '/target', state: { data } })`）
+  ```typescript
+  // ✅ 推荐：需要业务逻辑时使用编程式导航
+  const handleSaveAndJump = async () => {
+    const valid = await formRef.value?.validate()
+    if (!valid) return
+
+    await loginApi(formData)
+    ElMessage.success('登录成功')
+    router.push({ name: 'Dashboard' })
+  }
+  ```
+
+
 - 标准路由配置示例：
   ```typescript
   // apps/web/src/router/index.ts
@@ -1049,10 +1107,10 @@ const pageConfig = reactive({ pageNum: 1, pageSize: 10 })
           meta: { title: '控制台', requiresAuth: true, permission: 'dashboard:view' }
         },
         {
-          path: 'order/list',
-          name: 'OrderList',
-          component: () => import('@ais/web-order/src/views/OrderList/index.vue'),
-          meta: { title: '订单列表', requiresAuth: true, permission: 'order:list', keepAlive: true }
+          path: 'login/index',
+          name: 'Login',
+          component: () => import('@ais/web-login/src/views/Login/index.vue'),
+          meta: { title: '登录', requiresAuth: true, permission: 'login:view', keepAlive: true }
         },
         {
           path: 'goods/detail/:id',
